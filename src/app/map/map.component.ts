@@ -25,12 +25,12 @@ export class MapComponent implements OnInit {
   ngOnInit(): void {
 
     /************************PART C. IDENTIFY THE SIX PROPERTIES *****************/
-    const countryName: string = '';
-    const capitalCity: string = '';
-    const region: string = '';
-    const incomeLevel = '';
-    const longitude: string = '';
-    const latitude: string = '';
+    let countryName: string = '';
+    let capitalCity: string = '';
+    let region: string = '';
+    let incomeLevel = '';
+    let longitude: string = '';
+    let latitude: string = '';
 
     if (isPlatformBrowser(this.platformId)) {
       const svgPaths = document.querySelectorAll<SVGPathElement>('path');
@@ -48,6 +48,24 @@ export class MapComponent implements OnInit {
           path.style.fill = '';
         });
 
+        /************************PART G. API SERVICE *****************/
+        svgData.addEventListener('click', () => {
+          this.getWorldBankAPI(svgData).subscribe(data => {
+            let dataPath: any = data[1];
+            countryName = dataPath[0].name;
+            document.getElementById('name')!.innerText = countryName;
+            capitalCity = dataPath[0].capitalCity;
+            document.getElementById('capital')!.innerText = capitalCity;
+            region = dataPath[0].region.value;
+            document.getElementById('region')!.innerText = region;
+            incomeLevel = dataPath[0].incomeLevel.value;
+            document.getElementById('income')!.innerText = incomeLevel;
+            longitude = dataPath[0].longitude;
+            document.getElementById('longitude')!.innerText = longitude;
+            latitude = dataPath[0].latitude;
+            document.getElementById('latitude')!.innerText = latitude;
+          });
+        });
       });
     }
   }
